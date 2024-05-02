@@ -3,21 +3,25 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js"; 
 import {User} from "../models/user.model.js"
 import { ApiResponse } from "../utils/ApiResponse.js";
-// import bcrypt from "bcrypt"
-import {uploadOnCloudinary} from "../utils/cloudinary.js"
+import bcrypt from "bcrypt"
+import {uploadOnCloudinary} from "../utils/cloudinary.js";
+import mongoose from "mongoose";
 
-const generateAccessAndRefereshToken = async(userId) => {
+
+const generateAccessAndRefereshTokens = async(userId) =>{
     try {
         const user = await User.findById(userId)
-        const accessToken = await generateAccessToken()
-        const refreshToken = await generateRefreshToken()
+        const accessToken = user.generateAccessToken()
+        const refreshToken = user.generateRefreshToken()
 
         user.refreshToken = refreshToken
-        await user.save({validateBeforeSave: false})
-        return(accessToken, refreshToken)
+        await user.save({ validateBeforeSave: false })
+
+        return {accessToken, refreshToken}
+
 
     } catch (error) {
-        throw new ApiError(500, "Something went wrong while generating access and refresh token")
+        throw new ApiError(500, "Something went wrong while generating referesh and access token")
     }
 }
 
@@ -97,7 +101,7 @@ const registerUser = asyncHandler( async (req, res) => {
 })
 
 
-const loginUser = asyncHandler(async () => {
+const loginUser = asyncHandler(async (req, res) => {
     // req body -> data
     // username or email
     // find the user
@@ -107,8 +111,8 @@ const loginUser = asyncHandler(async () => {
     // send cookies
     // send response
 
-    const {fullName, username, email} = req.body
-    if(!(username || email)) {
+    const {password, username, email} = req.body
+    if(!username && !email) {
         throw new ApiError(400, "username or email is required")
     }
 
@@ -127,7 +131,7 @@ const loginUser = asyncHandler(async () => {
         throw new ApiError(401, "Password is incorrect")
     }
 
-    const {generateAccessToken, generateRefreshToken} = await generateAccessAndRefereshToken(user._id)
+    const {accessToken, refreshToken} = await generateAccessAndRefereshTokens(user._id)
     const loggedInUser = await User.findById(user._id).select("-password -refreshToken")
 
     const options = {
