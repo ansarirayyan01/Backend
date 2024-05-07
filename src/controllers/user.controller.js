@@ -194,7 +194,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     // send response
 
     const incomingRefreshToken = req.cookies.refreshToken || req.cookies.body
-    if (incomingRefreshToken) {
+    if (!incomingRefreshToken) {
         throw new ApiError(401, "Invalid refresh token")
     }
 
