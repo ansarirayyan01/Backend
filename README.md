@@ -35,10 +35,9 @@ To set up the backend of our Video Tube Website locally, follow these steps:
     - Define the following variables:
         ```
         PORT=8000
-        SECRET_KEY=<your-secret-key>
         DATABASE_URI=<your-mongodb-uri>
-        AWS_ACCESS_KEY_ID=<your-aws-access-key-id>
-        AWS_SECRET_ACCESS_KEY=<your-aws-secret-access-key>
+        ACCESS_TOKEN_SECRET=<your access-token-secret>
+        REFRESH_TOKEN_SECRET=<your refresh-token-secret>
       
         ```
 
@@ -66,7 +65,7 @@ To set up the backend of our Video Tube Website locally, follow these steps:
 ### Interaction
 
 - Users can like, comment on, and share videos.
-- A notification system informs users about new likes, comments, and followers.
+- A notification system informs users about new likes, comments, and followers.(Notification system is been working on soon this feature will be added)
 
 ### Administration
 
@@ -74,7 +73,7 @@ To set up the backend of our Video Tube Website locally, follow these steps:
 
 ## Deployment
 
-Our backend system can be deployed to production using platforms like Heroku, AWS, or any other cloud service provider. Ensure to set up environment variables specific to your production environment and configure the necessary services such as database, cloud storage, and message broker.
+Our backend system can be deployed to production using platforms like Cloudinary or any other cloud service provider. Ensure to set up environment variables specific to your production environment and configure the necessary services such as database, cloud storage, and message broker.
 
 ## Contributor
 
