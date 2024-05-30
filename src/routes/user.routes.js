@@ -49,6 +49,8 @@ router
 .route("/current-user")
 .get(verifyJwt, getCurrentUser)
 
+router.route("/update-account").patch(verifyJwt, updateAccountDetails)
+
 router
 .route("/update-avatar")
 .patch(verifyJwt, upload.single("avatar"), updateAvatar)
